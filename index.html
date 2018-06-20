@@ -1,0 +1,52 @@
+<html>
+	<header>
+		<script type="text/javascript" src="js/Code2Json.js"></script>
+		<script type="text/javascript">
+			function submitJsonString(json_string)
+			{
+				var enc = new TextEncoder();
+				var buf = enc.encode(json_string);
+				var blob = new Blob([buf]);
+
+				var formData = new FormData();
+				formData.append('json', blob, 'test');
+
+				var xhr = new XMLHttpRequest(); 
+				xhr.open("POST", "Synth.php"); 
+				xhr.responseType = "text";
+				xhr.onload = function() 
+				{
+					player=document.getElementById('player');
+					player.hidden = false;
+					player.src= "sessions/"+xhr.response+".mp3?cb="+new Date().getTime();
+				}
+				xhr.send(formData);
+			}
+
+			function submit()
+			{
+				code = document.getElementById('text').value;
+				json_string = Code2Json(code);
+				submitJsonString(json_string);
+			}
+						
+		</script>
+	</header>
+	<body>
+		<form action="javascript:submit()" method="post">
+			<p>
+				<textarea id="text" cols="80" rows="25" autofocus>
+
+seq=[Do(),Do(),So(),So(),La(),La(),So(5,96)];
+play(seq,1);	
+	
+				</textarea>  
+			</p>
+			<p>
+				<button type="submit">Submit</button>
+			</p>
+		</form>
+		<audio id="player" src="" controls=\"controls\" hidden></audio>
+	</body>
+
+</html>
