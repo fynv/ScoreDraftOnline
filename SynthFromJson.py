@@ -15,20 +15,19 @@ if len(sys.argv)>1:
 
 	Guitar = sd.KarplusStrongInstrument()
 
+	doc = sd.MeteorDocument()
+
 	buffers = {}
 
 	for play in json_data['inst_plays']:
 		trackId = play['trackId']
 		if not trackId in buffers:
-			buffers[trackId]= sg.TrackBuffer()
+			buffers[trackId]= doc.newBuf()
 		buf = buffers[trackId]
 		seq = play['seq']
-		Guitar.play(buf, seq)
+		doc.playNoteSeq(seq, Guitar, buf)
 
-	buf_list = [value for key, value in buffers.items()]
-	mixBuf = sg.TrackBuffer()
-	sg.MixTrackBufferList(mixBuf, buf_list)
-	sg.WriteTrackBufferToWav(mixBuf, wav_name)
+	doc.mixDown(wav_name)
 
 	os.system("lame "+wav_name+" "+mp3_name)
 	os.remove(wav_name)
