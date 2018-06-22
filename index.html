@@ -1,5 +1,7 @@
 <html>
 	<header>
+		<title>ScoreDraft Online</title>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" src="js/Code2Json.js"></script>
 		<script type="text/javascript">
 			function submitJsonString(json_string)
@@ -25,28 +27,41 @@
 
 			function submit()
 			{
-				code = document.getElementById('text').value;
+				editor = ace.edit("code");
+				code = editor.getValue();
 				json_string = Code2Json(code);
 				submitJsonString(json_string);
 			}
 						
 		</script>
+		<style type="text/css" media="screen">
+		#code {
+			border: 1px solid lightgray;
+			margin: auto;
+			height: 400px;
+			width: 80%;
+		}
+	    </style>
 	</header>
 	<body>
-		<form action="javascript:submit()" method="post">
-			<p>
-				<textarea id="text" cols="80" rows="25" autofocus>
 
-seq=[Do(),Do(),So(),So(),La(),La(),So(5,96)];
-play(seq,1);	
-	
-				</textarea>  
-			</p>
-			<p>
-				<button type="submit">Submit</button>
-			</p>
-		</form>
-		<audio id="player" src="" controls=\"controls\" hidden></audio>
+		<pre id="code" class="ace_editor">
+seq=new Sequence();
+seq.Add([Do(),Do(),So(),So(),La(),La(),So(5,96)]);
+seq.Add([Fa(),Fa(),Mi(),Mi(),Re(),Re(),Do(5,96)]);
+play(seq,1);
+		</pre>
+
+		<p align="center"><button onclick="javascript:submit()">Submit</button></p>
+		<p align="center"><audio id="player" src="" controls=\"controls\" hidden></audio></p>
+
+		<script>
+			editor = ace.edit("code");
+			editor.setTheme("ace/theme/clouds");
+			editor.session.setMode("ace/mode/javascript");
+			editor.setFontSize(16);
+		</script>
+
 	</body>
 
 </html>

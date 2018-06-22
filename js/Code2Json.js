@@ -4,10 +4,19 @@ function Code2Json(code)
 		inst_plays : new Array(),
 	}
 
+	Sequence = function()
+	{
+		this.data=[]
+	}
+	Sequence.prototype.Add= function(sub_seq)
+	{
+		this.data=this.data.concat(sub_seq)
+	}
+
 	function play(seq, trackId)
 	{
 		play_item = {
-			seq: seq,
+			seq: seq.data,
 			trackId: trackId
 		};
 
