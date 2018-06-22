@@ -8,9 +8,15 @@ function Code2Json(code)
 	{
 		this.data=[]
 	}
+
 	Sequence.prototype.Add= function(sub_seq)
 	{
 		this.data=this.data.concat(sub_seq)
+	}
+
+	Sequence.prototype.AsItem = function()
+	{
+		return [this.data]
 	}
 
 	function play(seq, trackId)
