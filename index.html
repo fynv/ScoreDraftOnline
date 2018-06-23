@@ -4,6 +4,26 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" src="js/Code2Json.js"></script>
 		<script type="text/javascript">
+			function submitJsCode(jsCode)
+			{
+				var enc = new TextEncoder();
+				var buf = enc.encode(jsCode);
+				var blob = new Blob([buf]);
+
+				var formData = new FormData();
+				formData.append('js', blob, 'test');
+
+				var xhr = new XMLHttpRequest(); 
+				xhr.open("POST", "Save.php"); 
+				xhr.responseType = "text";
+				xhr.onload = function() 
+				{
+					session_num = document.getElementById('session_num');
+					session_num.value = xhr.response
+				}
+				xhr.send(formData);
+
+			}
 			function submitJsonString(json_string)
 			{
 				var enc = new TextEncoder();
@@ -18,46 +38,373 @@
 				xhr.responseType = "text";
 				xhr.onload = function() 
 				{
-					player=document.getElementById('player');
-					player.hidden = false;
-					player.src= "sessions/"+xhr.response+".mp3?cb="+new Date().getTime();
+					displayer=document.getElementById('displayer');
+					displayer.style.display = "block";
+					displayer.src="Meteor.php";
 				}
 				xhr.send(formData);
 			}
 
 			function submit()
 			{
-				editor = ace.edit("code");
-				code = editor.getValue();
-				json_string = Code2Json(code);
+				var editor = ace.edit("code");
+				var code = editor.getValue();
+				submitJsCode(code);
+				var json_string = Code2Json(code);
 				submitJsonString(json_string);
+			}
+
+			function loadJS(jsFileName)
+			{
+				var xhr = new XMLHttpRequest(); 
+				xhr.open("POST", jsFileName); 
+				xhr.onload = function() 
+				{
+					editor = ace.edit("code");
+					editor.setValue(xhr.response);
+				}
+				xhr.send();
+			}
+
+			function resetSessionNum()
+			{
+				var xhr = new XMLHttpRequest(); 
+				xhr.open("POST", "Session.php"); 
+				xhr.responseType = "text";
+				xhr.onload = function() 
+				{
+					session_num = document.getElementById('session_num');
+					session_num.value = xhr.response;
+					retrieve();
+				}
+				xhr.send();
+			}
+
+			function retrieve()
+			{
+				var session_num = document.getElementById('session_num');
+				if (session_num.value =="")
+				{
+					resetSessionNum();
+					return;
+				}
+
+				var jsFileName= "sessions/"+session_num.value+".js"
+				loadJS(jsFileName);
+			}
+
+			function copy_session_num()
+			{
+				var session_num = document.getElementById('session_num');
+				session_num.select();
+				document.execCommand("copy");
+			}
+
+			function fix_case()
+			{
+				var editor = ace.edit("code");
+				editor.replaceAll("Do(", {needle: "do("});
+				editor.replaceAll("Re(", {needle: "re("});
+				editor.replaceAll("Mi(", {needle: "mi("});
+				editor.replaceAll("Fa(", {needle: "fa("});
+				editor.replaceAll("So(", {needle: "so("});
+				editor.replaceAll("La(", {needle: "la("});
+				editor.replaceAll("Ti(", {needle: "ti("});
+			}
+
+			var info_insts=[];
+			var info_percs=[];
+			var info_singers=[];
+
+			function load_inst_list()
+			{
+				var xhr = new XMLHttpRequest(); 
+				xhr.open("POST", "InstList.json"); 
+				xhr.onload = function() 
+				{
+					var json_string=xhr.response;
+					var json_data = JSON.parse(json_string);
+					var editor = ace.edit("code");
+					var property_label = document.getElementById('property_label');
+					var property_list = document.getElementById('property_list');
+					var property_intro =  document.getElementById('property_intro');
+
+					// instruments
+					var list_insts = document.getElementById('inst_list');
+
+					info_insts = json_data.Insts;
+					for (let i=0; i<info_insts.length; i++)
+					{
+						let option = document.createElement('option');
+						option.text = info_insts[i].Name;
+						list_insts.add(option, null);
+
+						option.onclick= function()
+						{
+							property_label.innerHTML=option.text;
+							let propreties = info_insts[i].Properties;
+							property_list.innerHTML = "";
+							// volume
+							{
+								let option_j = document.createElement('option');
+								option_j.text = "volume";
+								property_list.add(option_j, null);
+								option_j.ondblclick = function()
+								{
+									editor.insert("inst.info.vol=1.0;");
+								}
+
+							}
+							// pan
+							{
+								let option_j = document.createElement('option');
+								option_j.text = "pan";
+								property_list.add(option_j, null);
+								option_j.ondblclick = function()
+								{
+									editor.insert("inst.info.pan=0.0;");
+								}
+							}
+							for (let j=0; j<propreties.length; j++)
+							{
+								let option_j = document.createElement('option');
+								option_j.text = propreties[j].Name;
+								property_list.add(option_j, null);
+								option_j.ondblclick = function()
+								{
+									editor.insert(propreties[j].Code);
+								}
+							}
+
+							property_intro.innerHTML=info_insts[i].Introduction;
+
+						}
+
+						option.ondblclick = function()
+						{
+							editor.insert(info_insts[i].Code);
+						}
+					}
+
+					// percussions
+					var list_percs = document.getElementById('perc_list');
+					info_percs = json_data.Percs;
+					for (let i=0; i<info_percs.length; i++)
+					{
+						let option = document.createElement('option');
+						option.text = info_percs[i].Name;
+						list_percs.add(option, null);
+
+						option.onclick= function()
+						{
+							property_label.innerHTML=option.text;
+							let propreties = info_percs[i].Properties;
+							property_list.innerHTML = "";
+							// volume
+							{
+								let option_j = document.createElement('option');
+								option_j.text = "volume";
+								property_list.add(option_j, null);
+								option_j.ondblclick = function()
+								{
+									editor.insert("perc.info.vol=1.0;");
+								}
+
+							}
+							// pan
+							{
+								let option_j = document.createElement('option');
+								option_j.text = "pan";
+								property_list.add(option_j, null);
+								option_j.ondblclick = function()
+								{
+									editor.insert("perc.info.pan=0.0;");
+								}
+							}
+							for (let j=0; j<propreties.length; j++)
+							{
+								let option_j = document.createElement('option');
+								option_j.text = propreties[j].Name;
+								property_list.add(option_j, null);
+								option_j.ondblclick = function()
+								{
+									editor.insert(propreties[j].Code);
+								}
+							}
+
+							property_intro.innerHTML=info_percs[i].Introduction;
+						}
+
+						option.ondblclick = function()
+						{
+							editor.insert(info_percs[i].Code);
+						}
+					}
+
+					// singers
+					var list_singers = document.getElementById('singer_list');
+					info_singers = json_data.Singers;
+					for (let i=0; i<info_singers.length; i++)
+					{
+						let option = document.createElement('option');
+						option.text = info_singers[i].Name;
+						list_singers.add(option, null);
+
+						option.onclick= function()
+						{
+							property_label.innerHTML=option.text;
+							let propreties = info_singers[i].Properties;
+							property_list.innerHTML = "";
+							// volume
+							{
+								let option_j = document.createElement('option');
+								option_j.text = "volume";
+								property_list.add(option_j, null);
+								option_j.ondblclick = function()
+								{
+									editor.insert("singer.info.vol=1.0;");
+								}
+
+							}
+							// pan
+							{
+								let option_j = document.createElement('option');
+								option_j.text = "pan";
+								property_list.add(option_j, null);
+								option_j.ondblclick = function()
+								{
+									editor.insert("singer.info.pan=0.0;");
+								}
+							}
+							for (let j=0; j<propreties.length; j++)
+							{
+								let option_j = document.createElement('option');
+								option_j.text = propreties[j].Name;
+								property_list.add(option_j, null);
+								option_j.ondblclick = function()
+								{
+									editor.insert(propreties[j].Code);
+								}
+							}
+
+							property_intro.innerHTML=info_singers[i].Introduction;
+
+						}
+						option.ondblclick = function()
+						{
+							editor.insert(info_singers[i].Code);
+						}
+
+					}
+
+				}
+				xhr.send();
 			}
 						
 		</script>
 		<style type="text/css" media="screen">
+		#displayer{
+			display: none;
+			position: relative;
+			margin-left: auto;
+    		margin-right: auto;
+		    top: 0;
+		    left: 0;
+		    width: 850px;
+		    height: 550px;
+		}
+		#code_parent{
+			position: relative;
+		}
 		#code {
+			display: inline-block;
+			position: relative;
+			top : 0;
+			left : 0;
+			width: 60%;
+			height: 500px;
 			border: 1px solid lightgray;
-			margin: auto;
-			height: 400px;
-			width: 80%;
+		}
+		#resources {
+			display: inline-block;
+			position: relative;
+			top : 0;
+			left : 0;
+			width: 15%;
+			height: 500px;
+		}
+		#properties {
+			display: inline-block;
+			position: relative;
+			top : 0;
+			left : 0;
+			width: 15%;
+			height: 500px;
+		}
+		.select_box {
+			width : 180px;
 		}
 	    </style>
 	</header>
 	<body>
 		<h2 align="center">ScoreDraft Online</h2>
-		<pre id="code" class="ace_editor">
-seq=new Sequence();
+		<iframe id="displayer"></iframe>
+		<div>Note: whatever you enter below will be executed locally by your browser. 
+		<br/>For example, "alert('Hello world');" will actually pop-up a message-box. You can use it for debugging. 
+		<br/>Double clicking any item on the right side will insert related code.</div>
+		<div id="code_parent">
+			<pre id="code" class="ace_editor">
+var seq=new Sequence();
 seq.Add([Do(),Do(),So(),So(),La(),La(),So(5,96)]);
 seq.Add([Fa(),Fa(),Mi(),Mi(),Re(),Re(),Do(5,96)]);
-play(seq,1);
-		</pre>
 
-		<p align="center"><button onclick="javascript:submit()">Submit</button></p>
-		<p align="center"><audio id="player" src="" controls=\"controls\" hidden></audio></p>
+var track1 = new Track();
+var inst = new Instrument("KarplusStrong");
+playNoteSeq(seq,inst,track1);
+			</pre>		
+			<div id="resources">
+				<div style="display: block; position: absolute; top:0; left: 0;">
+					<div><b>Resources:</b></div>
+					<div>Instruments:</div>
+					<select id="inst_list" class="select_box" size="8"></select>
+					<div>Percussions:</div>
+					<select id="perc_list" class="select_box" size="8" ></select>
+					<div>Singers:</div>
+					<select id="singer_list" class="select_box" size="8" ></select>
+				</div>
+			</div>
+			<div id="properties">
+				<div style="display: block; position: absolute; top:0; left: 0;">
+					<div><b>Properties:</b></div>
+					<div id=property_label></div>
+					<select id="property_list" class="select_box" size="12" ></select>
+					<div id="property_intro"></div>
+				</div>
+			</div>
+			<div style="display: block; position: relative;">
+				<!--<button onclick="javascript:fix_case()"> Fix case of notes </button>-->
+				<button onclick="javascript:submit()">Submit</button>
+				&nbsp; &nbsp; Examples:
+				<button onclick="javascript:loadJS('perc_test.js')">Percussion Test</button>
+				<button onclick="javascript:loadJS('geping_test.js')">GePing Test</button>
+				<p>Session number: </p>
+				<input type="text" id="session_num" style="width: 200px" />
+				<button onclick="javascript:copy_session_num()">Copy</button>
+				<button onclick="javascript:retrieve()">Retrieve</button>
+				<p>Your source-code will to gathered to the server when "Submit" is clicked. <br/>
+				Chance is that you can retrieve it next time using the session number. <br/>
+				But there's no gurantee. Administrator may clean up the database or close the <br/>
+				service at any time without any notice. </p>
+				<p>If you lost the number simply by a refresh, then just try clicking "Retrieve" <br/>
+				with an empty input box.
+				</p>
+			</div>
+		</div>
 
-		<script>
-			editor = ace.edit("code");
-			editor.setTheme("ace/theme/clouds");
+		<script type="text/javascript">
+			load_inst_list();
+			var editor = ace.edit("code");
+			editor.setTheme("ace/theme/chrome");
 			editor.session.setMode("ace/mode/javascript");
 			editor.setFontSize(16);
 		</script>
