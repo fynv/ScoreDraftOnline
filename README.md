@@ -41,7 +41,8 @@ With CMake:
 	$ make
 	$ make install
 
-With setuptools
+With setuptools:
+
 	$ cd SingingGadgets
 	$ python3 setup.py build
 	$ python3 setup.py install
