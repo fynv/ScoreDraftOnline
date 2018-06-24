@@ -9,7 +9,7 @@ Online demo in available:
 
 ## How it works
 
-The system let the users write musical scores by coding directly their browsers with javascript. The code this be exectuted along with ScoreDraft's client-side (js) APIs and generate an .json file, which will be uploaded to the server. Server-side Pyton script will decode the .json and call SingingGadgets to generate wave-form and Meteor(visualizer) data. The generated data will be transferred back to client browser for playback and visualization.
+The system let the users write musical scores by coding directly in their browsers with javascript. The code will then be exectuted along with ScoreDraft's client-side (js) APIs and generate an .json file, which will be uploaded to the server. Server-side Pyton script will decode the .json and call SingingGadgets to generate wave-form and Meteor(visualizer) data. The generated data will be transferred back to client browser for playback and visualization.
 
 All samples and voicebanks are deployed are server side, user will see a list of available instruments/percussions/singers. Currently, user cannot extend them from client side.
 
