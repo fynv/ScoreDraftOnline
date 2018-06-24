@@ -37,7 +37,7 @@ With CMake:
 	$ cd SingingGadgets
 	$ mkdir build
 	$ cd build
-	$ cmake .. -DCMAKE_INSTALL_PATH=../Test
+	$ cmake .. -DCMAKE_INSTALL_PREFIX=../Test
 	$ make
 	$ make install
 
