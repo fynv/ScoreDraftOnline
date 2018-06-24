@@ -9,9 +9,9 @@ Online demo in available:
 
 ## How it works
 
-The system let the users write musical scores by coding directly in their browsers with javascript. The code will then be exectuted along with ScoreDraft's client-side (js) APIs and generate an .json file, which will be uploaded to the server. Server-side Pyton script will decode the .json and call SingingGadgets to generate wave-form and Meteor(visualizer) data. The generated data will be transferred back to client browser for playback and visualization.
+The system let the users write musical scores by coding directly in their browsers with javascript. The code will then be exectuted along with ScoreDraft's client-side (js) APIs and generate a .json file, which will be uploaded to the server. Server-side Pyton script will decode the .json and call SingingGadgets to generate wave-form and Meteor(visualizer) data. The generated data will be transferred back to client browser for playback and visualization.
 
-All samples and voicebanks are deployed are server side, user will see a list of available instruments/percussions/singers. Currently, user cannot extend them from client side.
+All samples and voicebanks are deployed on server side, user will see a list of available instruments/percussions/singers. Currently, user cannot extend them from client side.
 
 ## Deloying it on your own server
 
@@ -24,7 +24,7 @@ ScoreDraftOnline requires customizing the behavior of how SingingGadgets finds t
 
 ### Setting-up SingingGadgets
 
-By default, SingingGadgets searches samples and voicebanks from the starting place of application. User will need to customize the behavior by editing ScoreDraft/__init__.py. Find the line "RESOURCE_ROOT='.'", you need to change the "." to wherever you place the resources using an absolute path. For example:
+By default, SingingGadgets searches samples and voicebanks from the starting place of an application. User will need to customize the behavior by editing ScoreDraft/\__init\__.py. Find the line "RESOURCE_ROOT='.'", you need to change the "." to wherever you place the resources using an absolute path. For example:
 
 	RESOURCE_ROOT = '/home/user/SDRes'
 
@@ -49,11 +49,11 @@ With setuptools
 ### Setting-up ScoreDraftOnline
 
 You can clone/download the source-code of ScoreDraftOnline from this page.
-Before hosting it in you Apache-php environment, you need to do the following minimal setup steps:
+Before hosting it in you Apache-php environment, you need to do the following setup steps:
 
 1. Create an empty directory "sessions" for holding session data files.
 2. Edit ImportScoreDraft.py, set the "sys.path+=" line according to where you installed SingingGadgets. If you installed with setuptools, then "sys.path+=" is not needed and can be removed.
-3. Edit "Synth.php". You may need to change "python" to "python3" in some environments where you have multiple Pythons.
+3. Edit "Synth.php". You may need to change "python" to "python3" in some environments such as when you have multiple Pythons.
 4. Setting-up instrument/percussion/singer lists
 
 Part of the source-code need to be customized according to the samples and voicebanks you deployed for SingingGadgets. 2 files are related to this:
