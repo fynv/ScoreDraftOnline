@@ -4,26 +4,6 @@
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.2.6/ace.js" type="text/javascript" charset="utf-8"></script>
 		<script type="text/javascript" src="js/Code2Json.js"></script>
 		<script type="text/javascript">
-			function submitJsCode(jsCode)
-			{
-				var enc = new TextEncoder();
-				var buf = enc.encode(jsCode);
-				var blob = new Blob([buf]);
-
-				var formData = new FormData();
-				formData.append('js', blob, 'test');
-
-				var xhr = new XMLHttpRequest(); 
-				xhr.open("POST", "Save.php"); 
-				xhr.responseType = "text";
-				xhr.onload = function() 
-				{
-					session_num = document.getElementById('session_num');
-					session_num.value = xhr.response
-				}
-				xhr.send(formData);
-
-			}
 			function submitJsonString(json_string)
 			{
 				var enc = new TextEncoder();
@@ -45,13 +25,35 @@
 				xhr.send(formData);
 			}
 
+			function submitJsCode(jsCode)
+			{
+				var enc = new TextEncoder();
+				var buf = enc.encode(jsCode);
+				var blob = new Blob([buf]);
+
+				var formData = new FormData();
+				formData.append('js', blob, 'test');
+
+				var xhr = new XMLHttpRequest(); 
+				xhr.open("POST", "Save.php"); 
+				xhr.responseType = "text";
+				xhr.onload = function() 
+				{
+					session_num = document.getElementById('session_num');
+					session_num.value = xhr.response
+
+					var json_string = Code2Json(jsCode);
+					submitJsonString(json_string);
+				}
+				xhr.send(formData);
+
+			}
+
 			function submit()
 			{
 				var editor = ace.edit("code");
 				var code = editor.getValue();
 				submitJsCode(code);
-				var json_string = Code2Json(code);
-				submitJsonString(json_string);
 			}
 
 			function loadJS(jsFileName)
