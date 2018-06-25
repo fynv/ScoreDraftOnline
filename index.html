@@ -302,6 +302,12 @@
 				}
 				xhr.send();
 			}
+
+			function show_time()
+			{
+				var session_num = document.getElementById('session_num');
+				window.open("show.php?num="+session_num.value,"_self");
+			}
 						
 		</script>
 		<style type="text/css" media="screen">
@@ -393,12 +399,17 @@ playNoteSeq(seq,inst,track1);
 				<input type="text" id="session_num" style="width: 200px" />
 				<button onclick="javascript:copy_session_num()">Copy</button>
 				<button onclick="javascript:retrieve()">Retrieve</button>
-				<p>Your source-code will be gathered to the server when "Submit" is clicked. <br/>
-				Chance is that you can retrieve it next time using the session number. <br/>
-				But there's no gurantee. Administrator may clean up the database or close the <br/>
+				<button onclick="javascript:show_time()">Show Time</button>
+				<p>Your source-code will be gathered to the server when "Submit" is clicked. 
+				Chance is that you can retrieve it next time using the session number. 
+				But there's no gurantee. Administrator may clean up the database or close the 
 				service at any time without any notice. </p>
-				<p>If you lost the number simply by a refresh, then just try clicking "Retrieve" <br/>
+				<p>If you lost the number simply by a refresh, then just try clicking "Retrieve" 
 				with an empty input box.
+				</p>
+				<p>When you are finished with your work, you can click the "Show Time" button, which
+				will lead you to a shareable page with the animation and the read-only version of your
+				source-code.
 				</p>
 			</div>
 		</div>

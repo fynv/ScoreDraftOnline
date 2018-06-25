@@ -1,6 +1,10 @@
-
-<?php 
+<?php
 session_start(); 
+$session_num =  session_id();
+if (isset($_GET["num"]))
+{
+	$session_num=$_GET["num"];
+}
 ?>
 <html>
  	<head>
@@ -8,7 +12,7 @@ session_start();
  		 <script type="text/javascript" src="/js/meteor.js"></script>
  		 <?php
  		 echo " <script type=\"text/javascript\">\n";
- 		 echo "		var session_num=\"".session_id()."\"\n";
+ 		 echo "		var session_num=\"".$session_num."\"\n";
  		 echo "		var time_hash=\"".microtime()."\"\n";
  		 echo "</script>\n";
  		 ?>
@@ -39,7 +43,7 @@ session_start();
 		<div>
 			<audio id='player' controls="controls" autoplay>
 			<?php
-				echo "<source type=\"audio/mpeg\" src=\"/sessions/".session_id().".mp3?cb=".microtime()."\"/>\n"
+				echo "<source type=\"audio/mpeg\" src=\"/sessions/".$session_num.".mp3?cb=".microtime()."\"/>\n"
 			?>
 			</audio>
 		</div>
