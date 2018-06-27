@@ -1,4 +1,4 @@
-function Code2Json(code)
+function Real_Code2Json(code)
 {
 	json_data={
 		tempo: 80,
@@ -133,98 +133,62 @@ function Code2Json(code)
 
 		json_data.singings.push(singing_item);
 	}
-
-	// note definitions
-	var Freqs=new Array(12);
-	for (let i=0; i<12; i++)
-		Freqs[i]= Math.pow(2.0, i/12.0);
 	
-	function note(octave, freq, duration)
-	{
-		return [freq*Math.pow(2.0, (octave-5.0)), duration]
-	}
-
-	function Do(octave=5, duration=48)
-	{
-		return note(octave,Freqs[0],duration)
-	}
-
-	function SetDo(freq)
-	{
-		Freqs[0]=freq
-	}
-
-	function Re(octave=5, duration=48)
-	{
-		return note(octave,Freqs[2],duration)
-	}
-
-	function SetRe(freq)
-	{
-		Freqs[2]=freq
-	}
-
-	function Mi(octave=5, duration=48)
-	{
-		return note(octave,Freqs[4],duration)
-	}
-
-	function SetMi(freq)
-	{
-		Freqs[4]=freq
-	}
-
-	function Fa(octave=5, duration=48)
-	{
-		return note(octave,Freqs[5],duration)
-	}
-
-	function SetFa(freq)
-	{
-		Freqs[5]=freq
-	}
-
-	function So(octave=5, duration=48)
-	{
-		return note(octave,Freqs[7],duration)
-	}
-
-	function SetSo(freq)
-	{
-		Freqs[7]=freq
-	}
-
-	function La(octave=5, duration=48)
-	{
-		return note(octave,Freqs[9],duration)
-	}
-
-	function SetLa(freq)
-	{
-		Freqs[9]=freq
-	}
-
-	function Ti(octave=5, duration=48)
-	{
-		return note(octave,Freqs[11],duration)
-	}
-
-	function SetTi(freq)
-	{
-		Freqs[11]=freq
-	}
-
-	function BL(duration=48)
-	{
-		return [-1.0, duration]
-	}
-
-	function BK(duration=48)
-	{
-		return [-1.0, -duration]
-	}
-
 
 	eval(code);
 	return JSON.stringify(json_data)
+}
+
+function load_next_url(url_list, url_id, code, user_code)
+{
+	if (url_id>=url_list.length)
+	{
+		code+=user_code;
+		Real_Code2Json(code);
+	}
+	else
+	{		
+		var xhr = new XMLHttpRequest(); 
+		xhr.open("POST", url_list[url_id]); 
+		xhr.responseType = "text";
+		xhr.onload = function() 
+		{
+			code+=xhr.response;
+			url_id++;
+			load_next_url(url_list, url_id, code, user_code);
+		}
+		xhr.send();
+	}
+}
+
+
+function Code2Json(user_code)
+{
+	var lines = user_code.split('\n');
+
+	user_code="";
+	var url_list= ["notes.js"]
+
+	// parse include commands
+	for (let i=0;i<lines.length;i++)
+	{
+		line = lines[i];
+		if (line[0]=="#")
+		{
+			if (line.substr(0,8)=="#include")
+			{
+				let start = line.indexOf("\"", 8)+1;
+				let end = line.indexOf("\"", start);
+				url_list= url_list.concat(line.substr(start,end-start));
+			}
+		}
+		else
+		{
+			user_code+=line+"\n";
+		}
+	}
+
+
+	var code="";
+	load_next_url(url_list, 0, code, user_code);
 }
