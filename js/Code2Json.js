@@ -145,7 +145,7 @@ function Code2Json(user_code, submitter)
 	var lines = user_code.split('\n');
 
 	user_code="";
-	var url_list= ["notes.js"]
+	var url_list= ["notes.js", "seqLen.js"];
 
 	// parse include commands
 	for (let i=0;i<lines.length;i++)
@@ -169,15 +169,16 @@ function Code2Json(user_code, submitter)
 
 	var code="";
 	var count_loaded=0;
+	var requests = new Array(url_list.length);
 	for (let i=0;i<url_list.length;i++)
 	{
-		var xhr = new XMLHttpRequest(); 
-		xhr.open("POST", url_list[i]); 
-		xhr.responseType = "text";
-		xhr.onload = function() 
+		requests[i] = new XMLHttpRequest(); 
+		requests[i].open("POST", url_list[i]); 
+		requests[i].responseType = "text";
+		requests[i].onload = function() 
 		{
-			code+=xhr.response;
-			count_loaded ++; 
+			code+=requests[i].response;
+			count_loaded++; 
 			if (count_loaded==url_list.length)
 			{
 				code+=user_code;
@@ -185,7 +186,7 @@ function Code2Json(user_code, submitter)
 				submitter(json_string);
 			}
 		}
-		xhr.send();
+		requests[i].send();
 
 	}
 }
