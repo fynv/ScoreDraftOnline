@@ -1,4 +1,4 @@
-function Real_Code2Json(code, submitter)
+function Real_Code2Json(code)
 {
 	json_data={
 		tempo: 80,
@@ -136,32 +136,9 @@ function Real_Code2Json(code, submitter)
 	
 
 	eval(code);
-	
-	submitter(JSON.stringify(json_data));
-}
 
-function load_next_url(url_list, url_id, code, user_code, submitter)
-{
-	if (url_id>=url_list.length)
-	{
-		code+=user_code;
-		Real_Code2Json(code,submitter);
-	}
-	else
-	{		
-		var xhr = new XMLHttpRequest(); 
-		xhr.open("POST", url_list[url_id]); 
-		xhr.responseType = "text";
-		xhr.onload = function() 
-		{
-			code+=xhr.response;
-			url_id++;
-			load_next_url(url_list, url_id, code, user_code, submitter);
-		}
-		xhr.send();
-	}
+	return JSON.stringify(json_data);
 }
-
 
 function Code2Json(user_code, submitter)
 {
@@ -191,5 +168,24 @@ function Code2Json(user_code, submitter)
 
 
 	var code="";
-	load_next_url(url_list, 0, code, user_code, submitter);
+	var count_loaded=0;
+	for (let i=0;i<url_list.length;i++)
+	{
+		var xhr = new XMLHttpRequest(); 
+		xhr.open("POST", url_list[i]); 
+		xhr.responseType = "text";
+		xhr.onload = function() 
+		{
+			code+=xhr.response;
+			count_loaded ++; 
+			if (count_loaded==url_list.length)
+			{
+				code+=user_code;
+				var json_string=Real_Code2Json(code,submitter);
+				submitter(json_string);
+			}
+		}
+		xhr.send();
+
+	}
 }
