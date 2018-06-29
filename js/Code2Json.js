@@ -1,4 +1,4 @@
-function Real_Code2Json(code)
+function Real_Code2Json(code, submitter)
 {
 	json_data={
 		tempo: 80,
@@ -136,15 +136,16 @@ function Real_Code2Json(code)
 	
 
 	eval(code);
-	return JSON.stringify(json_data)
+	
+	submitter(JSON.stringify(json_data));
 }
 
-function load_next_url(url_list, url_id, code, user_code)
+function load_next_url(url_list, url_id, code, user_code, submitter)
 {
 	if (url_id>=url_list.length)
 	{
 		code+=user_code;
-		Real_Code2Json(code);
+		Real_Code2Json(code,submitter);
 	}
 	else
 	{		
@@ -155,14 +156,14 @@ function load_next_url(url_list, url_id, code, user_code)
 		{
 			code+=xhr.response;
 			url_id++;
-			load_next_url(url_list, url_id, code, user_code);
+			load_next_url(url_list, url_id, code, user_code, submitter);
 		}
 		xhr.send();
 	}
 }
 
 
-function Code2Json(user_code)
+function Code2Json(user_code, submitter)
 {
 	var lines = user_code.split('\n');
 
@@ -190,5 +191,5 @@ function Code2Json(user_code)
 
 
 	var code="";
-	load_next_url(url_list, 0, code, user_code);
+	load_next_url(url_list, 0, code, user_code, submitter);
 }

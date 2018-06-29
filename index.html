@@ -42,8 +42,7 @@
 					session_num = document.getElementById('session_num');
 					session_num.value = xhr.response;
 
-					var json_string = Code2Json(jsCode);
-					submitJsonString(json_string);
+					Code2Json(jsCode,submitJsonString);
 				}
 				xhr.send(formData);
 
