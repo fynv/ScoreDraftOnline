@@ -2,65 +2,65 @@
 	"Insts" : [
 		{
 			"Name" : "KarplusStrong",
-			"Code" : "var inst = new Instrument(\"KarplusStrong\");",
+			"Code" : "var inst = new Instrument(\"KarplusStrong\");\n",
 			"Properties" : [
 				{
 					"Name" : "cut_frequency",
-					"Code" : "inst.info.cut_frequency=10000.0;"
+					"Code" : "inst.info.cut_frequency=10000.0;\n"
 				},
 				{
 					"Name": "loop_gain",
-					"Code": "inst.info.loop_gain=0.99;"
+					"Code": "inst.info.loop_gain=0.99;\n"
 				},
 				{
 					"Name": "sustain_gain",
-					"Code": "inst.info.sustain_gain=0.8;"
+					"Code": "inst.info.sustain_gain=0.8;\n"
 				}
 			],
 			"Introduction" : "This is a pure algorithm based synthesizer of a Guitar like sound. <a href=\"https://en.wikipedia.org/wiki/Karplus%E2%80%93Strong_string_synthesis\">See here</a> for the algorithm"
 		},
 		{
 			"Name" : "SynthFontViena",
-			"Code" : "var inst= new Instrument(\"SynthFontViena\");",
+			"Code" : "var inst= new Instrument(\"SynthFontViena\");\n",
 			"Properties" : [
 				{
 					"Name" : "preset 0: Yamaha Grand Piano",
-					"Code" : "inst.info.preset_index=0;"
+					"Code" : "inst.info.preset_index=0;\n"
 				},
 				{
 					"Name" : "preset 1: Nylon String Guitar",
-					"Code" : "inst.info.preset_index=1;"
+					"Code" : "inst.info.preset_index=1;\n"
 				},
 				{
 					"Name" : "preset 2: Violin",
-					"Code" : "inst.info.preset_index=2;"
+					"Code" : "inst.info.preset_index=2;\n"
 				},
 				{
 					"Name" : "preset 3: Cello",
-					"Code" : "inst.info.preset_index=3;"
+					"Code" : "inst.info.preset_index=3;\n"
 				},
 				{
 					"Name" : "preset 4: Trumpet",
-					"Code" : "inst.info.preset_index=4;"
+					"Code" : "inst.info.preset_index=4;\n"
 				},
 				{
 					"Name" : "preset 5: Trombone",
-					"Code" : "inst.info.preset_index=5;"
+					"Code" : "inst.info.preset_index=5;\n"
 				},
 				{
 					"Name" : "preset 6: Clarinet",
-					"Code" : "inst.info.preset_index=6;"
+					"Code" : "inst.info.preset_index=6;\n"
 				},
 				{
 					"Name" : "preset 7: Flute",
-					"Code" : "inst.info.preset_index=7;"
+					"Code" : "inst.info.preset_index=7;\n"
 				}
 			],
 			"Introduction" : "This is a Sound-Font freely available <a href=\"http://www.synthfont.com\">here</a>. You'll need to use the \"info.preset_index\" property to set which preset to use."
 		},
 		{
 			"Name" : "Piano_Sampler",
-			"Code" : "var inst= new Instrument(\"Piano_Sampler\");",
+			"Code" : "var inst= new Instrument(\"Piano_Sampler\")\n",
 			"Properties" : [],
 			"Introduction" : "This is a sampler based instrument using multiple samples from <a href=\"https://freewavesamples.com/\">here</a>."
 		}
@@ -68,49 +68,49 @@
 	"Percs":[
 		{
 			"Name" : "BassDrum",
-			"Code" : "var perc = new Percussion(\"BassDrum\");",
+			"Code" : "var perc = new Percussion(\"BassDrum\");\n",
 			"Properties" : [],
 			"Introduction" : "This is a sampler based percussion using a sample from <a href=\"https://freewavesamples.com/\">here</a>."
 		},
 		{
 			"Name" : "Snare",
-			"Code" : "var perc = new Percussion(\"Snare\");",
+			"Code" : "var perc = new Percussion(\"Snare\");\n",
 			"Properties" : [],
 			"Introduction" : "This is a sampler based percussion using a sample from <a href=\"https://freewavesamples.com/\">here</a>."
 		},
 		{
 			"Name" : "Clap",
-			"Code" : "var perc = new Percussion(\"Clap\");",
+			"Code" : "var perc = new Percussion(\"Clap\");\n",
 			"Properties" : [],
 			"Introduction" : "This is a sampler based percussion using a sample from <a href=\"https://freewavesamples.com/\">here</a>."
 		},
 		{
 			"Name" : "ClosedHitHat",
-			"Code" : "var perc = new Percussion(\"ClosedHitHat\");",
+			"Code" : "var perc = new Percussion(\"ClosedHitHat\");\n",
 			"Properties" : [],
 			"Introduction" : "This is a sampler based percussion using a sample from <a href=\"https://freewavesamples.com/\">here</a>."
 		},
 		{
 			"Name" : "Tom1",
-			"Code" : "var perc = new Percussion(\"Tom1\");",
+			"Code" : "var perc = new Percussion(\"Tom1\");\n",
 			"Properties" : [],
 			"Introduction" : "This is a sampler based percussion using a sample from <a href=\"https://freewavesamples.com/\">here</a>."
 		},
 		{
 			"Name" : "Tom2",
-			"Code" : "var perc = new Percussion(\"Tom2\");",
+			"Code" : "var perc = new Percussion(\"Tom2\");\n",
 			"Properties" : [],
 			"Introduction" : "This is a sampler based percussion using a sample from <a href=\"https://freewavesamples.com/\">here</a>."
 		},
 		{
 			"Name" : "Tom3",
-			"Code" : "var perc = new Percussion(\"Tom3\");",
+			"Code" : "var perc = new Percussion(\"Tom3\");\n",
 			"Properties" : [],
 			"Introduction" : "This is a sampler based percussion using a sample from <a href=\"https://freewavesamples.com/\">here</a>."
 		},
 		{
 			"Name" : "Tom4",
-			"Code" : "var perc = new Percussion(\"Tom4\");",
+			"Code" : "var perc = new Percussion(\"Tom4\");\n",
 			"Properties" : [],
 			"Introduction" : "This is a sampler based percussion using a sample from <a href=\"https://freewavesamples.com/\">here</a>."
 		}
@@ -118,7 +118,7 @@
 	"Singers":[
 		{
 			"Name" : "GePing",
-			"Code" : "var singer = new Singer(\"GePing\");",
+			"Code" : "var singer = new Singer(\"GePing\");\n",
 			"Properties" : [],
 			"Introduction" : "The UTAU voicebank GePing is from <a href=\"http://utau.vocalover.com//\">http://utau.vocalover.com/</a>."
 		}
