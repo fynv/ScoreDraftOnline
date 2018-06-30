@@ -169,24 +169,23 @@ function Code2Json(user_code, submitter)
 
 	var code="";
 	var count_loaded=0;
-	var requests = new Array(url_list.length);
 	for (let i=0;i<url_list.length;i++)
 	{
-		requests[i] = new XMLHttpRequest(); 
-		requests[i].open("POST", url_list[i]); 
-		requests[i].responseType = "text";
-		requests[i].onload = function() 
+		let xhr =  new XMLHttpRequest(); 
+		xhr.open("POST", url_list[i]); 
+		xhr.responseType = "text";
+		xhr.onload = function() 
 		{
-			code+=requests[i].response;
+			code+=xhr.response;
 			count_loaded++; 
 			if (count_loaded==url_list.length)
 			{
 				code+=user_code;
-				var json_string=Real_Code2Json(code,submitter);
+				let json_string=Real_Code2Json(code,submitter);
 				submitter(json_string);
 			}
 		}
-		requests[i].send();
+		xhr.send();
 
 	}
 }
