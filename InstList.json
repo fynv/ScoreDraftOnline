@@ -60,7 +60,7 @@
 		},
 		{
 			"Name" : "Piano_Sampler",
-			"Code" : "var inst= new Instrument(\"Piano_Sampler\")\n",
+			"Code" : "var inst= new Instrument(\"Piano_Sampler\");\n",
 			"Properties" : [],
 			"Introduction" : "This is a sampler based instrument using multiple samples from <a href=\"https://freewavesamples.com/\">here</a>."
 		}
@@ -120,7 +120,7 @@
 			"Name" : "GePing",
 			"Code" : "var singer = new Singer(\"GePing\");\n",
 			"Properties" : [],
-			"Introduction" : "The UTAU voicebank GePing is from <a href=\"http://utau.vocalover.com//\">http://utau.vocalover.com/</a>."
+			"Introduction" : "The UTAU voicebank GePing is from <a href=\"http://utau.vocalover.com/\">http://utau.vocalover.com/</a>.<br/>Language: Chinese"
 		}
 	]
 }

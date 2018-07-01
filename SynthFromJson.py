@@ -111,8 +111,8 @@ if len(sys.argv)>1:
 	meteor_name = "sessions/"+sys.argv[1]+".meteor"
 	print("proccessing: "+json_name)
 
-	json_data= []
-	with open(json_name,"r") as f:
+	json_data= {}
+	with open(json_name,"r", encoding="utf-8") as f:
 		json_data = json.load(f)
 
 	doc = sd.MeteorDocument()

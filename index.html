@@ -307,6 +307,22 @@
 				var session_num = document.getElementById('session_num');
 				window.open("Show.php?num="+session_num.value,"_self");
 			}
+
+			function toggle_api_manual()
+			{
+				var show_api = document.getElementById('show_api');
+				var api_manual = document.getElementById('api');
+				if (api_manual.style.height=="0px")
+				{
+					show_api.innerHTML = "∧∧∧∧∧";
+					api_manual.style.height=500;
+				}
+				else
+				{
+					show_api.innerHTML = "∨∨∨∨∨";
+					api_manual.style.height=0;
+				}
+			}
 						
 		</script>
 		<style type="text/css" media="screen">
@@ -351,17 +367,276 @@
 		.select_box {
 			width : 180px;
 		}
+		#api{
+			display : block;
+			position: relative;
+			margin-left: auto;
+    		margin-right: auto;
+			top : 0;
+			left : 0;
+			width: 80%;
+			height: 0px;
+			overflow-y: auto;
+			border: 1px solid lightgray;
+			padding: 10px;
+		}
+		.api_code
+		{
+			display : block;
+			font-size:15px;
+			border: 1px solid darkgray;
+			padding: 5px;
+			width: 60%;
+		}
 	    </style>
 	</header>
 	<body>
-		<h2 align="center">ScoreDraft Online</h2>
+		<h1 align="center">ScoreDraft Online</h1>
+		<p align="center">Show API Manual <a id="show_api" href="javascript: toggle_api_manual()">∨∨∨∨∨</a> </p>
+		<div id = "api" style="height: 0px;">
+			<h2 align="center">About the API</h2>
+			<h3>Classes</h3>
+			<h4>Track</h4>
+			Track objects each maintains a time cursor which allows synthesized notes to be mixed sequenctially.<br/>
+			Different tracks will be mixed together by the system automatically with their starting points aligned.
+			<ul>
+				<li>Creation</li>
+				<code class="api_code">
+					var track = new Track();
+				</code>
+				<li>Properties</li>
+				<ul>
+					<li> Volume </li>
+					Volume of the track used when mixing tracks together.
+					<code class="api_code">
+						track.info.vol = 1.0;
+					</code>
+					<li> Pan </li>
+					Pan value of the track in the range -1.0~1.0. Used when mixing tracks together.
+					<code class="api_code">
+						track.info.pan = 0.0;
+					</code>
+				</ul>
+			</ul>
+			<h4>Instrument/Percussion/Singer</h4>
+			These objects are used for transforming sequences into wave-form note by note.
+			<ul>
+				<li>Creation</li>
+				Creation code can be inserted by double-clicking items in the "Resources" lists.
+				<code class="api_code">
+					// Instrument <br/>
+					// "KarplusStrong" is the kind name of the instrument.<br/>
+					var inst = new Instrument("KarplusStrong"); <br/>
+					// Percussion <br/>
+					// "BassDrum" is the kind name of the percussion. <br/>
+					var perc = new Percussion("BassDrum"); <br/>
+					// Singer <br/>
+					// "GePing" is the kind name of the singer. <br/>
+					var singer = new Singer("GePing"); <br/>
+				</code>
+				<li>Properties</li>
+				Different kinds of instruments have different sets of properties. <br/>
+				Property setting code can be inserted by double clicking items in the "Properties" list. <br/>
+				Common properties are: <br/>
+				<ul>
+					<li> Volume </li>
+					Volume of generated wave-from from each note.
+					<code class="api_code">
+						inst.info.vol = 1.0;
+					</code>
+					<li> Pan </li>
+					Pan value of generated wave-from from each note.
+					<code class="api_code">
+						inst.info.pan = 0.0;
+					</code>
+				</ul>
+			</ul>
+			<h4>Sequence</h4>
+			A Seqeunce object maintains a JavaScript "Array". <br/>
+			It is provided for the convinience of appending an array to an existing array.<br/>
+			JavaScript's Array class only provided a "concat" function, which will return a new array each time.<br>
+			<ul>
+				<li>Creation</li>
+				<code class="api_code">
+					var seq=new Sequence();
+				</code>
+				<li>Fields</li>
+					seq.data stores the JavaScript Array managed by Sequence internally. 
+				<li>Methods</li>
+				<code class="api_code">
+					// Clean data  <br/>
+					seq.Clean();  <br/>
+					<br/>
+					// Add new items into the sequence  <br/>
+					// the parameter is a JavaScript Array, whose elements will be added into the sequence <br/>
+					seq.Add([x,y,z]);  <br/>
+					<br/>
+					// First clean, then add new items into the sequence  <br/>
+					seq.ReAdd([x,y,z]); <br/>
+					<br/>
+					// Return the managed JavaScript Array =seq.data <br/>
+					seq.AsArray();<br/>
+					<br/>
+					// Return an array with the managed JavaScript Array as an item. =[seq.data]<br/>
+					seq.AsItem();<br/>
+				</code>
+			</ul>
+
+			<h3>Functions</h3>
+			<h4>Global Settings</h4>
+			<code class="api_code">
+				// Set the tempo in bpm <br/>
+				setTempo(80);  <br/>
+				<br/>
+				// Set the reference frequency (C5) is Hz<br/>
+				setRefFreq(261.626); <br/>
+			</code>
+			<h4>Play Commands</h4>
+			<code class="api_code">
+				// Play a note-sequence seq with inst, put the result into track<br/>
+				playNoteSeq(seq,inst,track); <br/>
+				<br/>
+				// Play a beat-sequence seq with an array of percussions perc_group, put the result into track<br/>
+				var PercGroup = [BaseDrum, Snare, Hat];<br/>
+				playBeatSeq(seq,perc_group,track); <br/>
+				<br/>
+				// Sing a singing-sequence seq with singer, put the result into track<br/>
+				sing(seq,singer,track);
+			</code>
+			<h4>Utilities</h4>
+			Unlike the APIs above which are all defined in Code2Json.js, utility functions are defined in <br/>
+			separated files which are submitted together with user's code. <br/>
+			Some of the utilities are included by default, others can be optionally included by user. <br/>
+			<ul>
+				<li>notes.js</li>
+				Included by default, contains definition of notes. 
+				<code class="api_code">
+					// generate a note <br/>
+					// with frequency relative to the C of the given octave, freq <br/>
+					// with duration, where 48 is 1 beat <br/>
+					function note(octave, freq, duration) <br/>
+					<br/>
+					// From Do() to Ti() <br/>
+					function Do(octave=5, duration=48) <br/>
+					function Re(octave=5, duration=48) <br/>
+					function Mi(octave=5, duration=48) <br/>
+					function Fa(octave=5, duration=48) <br/>
+					function So(octave=5, duration=48) <br/>
+					function La(octave=5, duration=48) <br/>
+					function Ti(octave=5, duration=48) <br/>
+					<br/>
+					// Rest, blank note <br/>
+					function BL(duration=48) <br/>
+					<br/>
+					// Backspace <br/>
+					function BK(duration=48) <br/>
+					<br/>
+					// Set the frequency of Do5 related to the reference frequency (C5) <br/>
+					// This can be used for key changing. <br/>
+					// Defaultly, Do5Equals(1.0) is called, setting key to C5 <br/>
+					function Do5Equals(key)
+				</code>
+				<li>seqLen.js</li>
+				Included by default, containing a single function for calculating the length of any sequence. <br/>
+				<code class="api_code">
+					// Return the total duration of seq. 48 = 1beat <br/>
+					function TellDuration(seq)
+				</code>
+			</ul>
+			C-like "#include" syntax is supported. That can be used to include the following files. <br/>
+			The code-editor will report an error when "#include" is used. Please ignore it.<br/>
+			<ul>
+				<li>notes_ext.js</li>
+				Add code 
+				<code class="api_code">
+					#include "notes_ext.js" 
+				</code>
+				to use it. It contains the halt-notes.
+				<code class="api_code">
+					// Do # <br/>
+					function DoS(octave=5, duration=48) <br/>
+					// Re b <br/>
+					function ReF(octave=5, duration=48) <br/>
+					// Re # <br/>
+					function ReS(octave=5, duration=48) <br/>
+					// Mi b <br/>
+					function MiF(octave=5, duration=48) <br/>
+					// Fa # <br/>
+					function FaS(octave=5, duration=48) <br/>
+					// So b <br/>
+					function SoF(octave=5, duration=48) <br/>
+					// So # <br/>
+					function SoS(octave=5, duration=48) <br/>
+					// La b <br/>
+					function LaF(octave=5, duration=48) <br/>
+					// La # <br/>
+					function LaS(octave=5, duration=48) <br/>
+					// Ti b <br/>
+					function TiF(octave=5, duration=48) <br/>
+				</code>
+				<li>keys.js</li>
+				Add code 
+				<code class="api_code">
+					#include "keys.js" 
+				</code>
+				to use it. It calculates the frequency of keys relative to C5.
+				<code class="api_code">
+					// C  <br/>
+					function keyC(octave)  <br/>
+					// C #  <br/>
+					function keyCS(octave)  <br/>
+					// D b  <br/>
+					function keyDF(octave) <br/>
+					// D  <br/>
+					function keyD(octave)  <br/>
+					// D #  <br/>
+					function keyDS(octave)  <br/>
+					// E b  <br/>
+					function keyEF(octave) <br/>
+					// E  <br/>
+					function keyE(octave)  <br/>
+					// F  <br/>
+					function keyF(octave)  <br/>
+					// F #  <br/>
+					function keyFS(octave)  <br/>
+					// G b  <br/>
+					function keyGF(octave) <br/>
+					// G  <br/>
+					function keyG(octave)  <br/>
+					// G #  <br/>
+					function keyGS(octave)  <br/>
+					// A b  <br/>
+					function keyAF(octave) <br/>
+					// A  <br/>
+					function keyA(octave)  <br/>
+					// A #  <br/>
+					function keyAS(octave)  <br/>
+					// B b  <br/>
+					function keyBF(octave) <br/>
+					// B  <br/>
+					function keyB(octave)  <br/>					
+				</code>
+			</ul>
+			Example using notes.js and keys.js together for key changing:
+			<code class="api_code">
+				#include "keys.js" <br/>
+				Do5Equals(keyG(5)); // that sets the new key to G
+			</code>	
+		</div>
 		<iframe id="displayer"></iframe>
 		<div>Note: whatever you enter below will be executed locally by your browser. 
 		<br/>For example, "alert('Hello world');" will actually pop-up a message-box. You can use it for debugging. 
 		<br/>Double clicking any item on the right side will insert related code.</div>
 		<div id="code_parent">
 			<pre id="code" class="ace_editor">
+#include "keys.js" 
+Do5Equals(keyG(5));
+
 var seq=new Sequence();
+seq.Add([Do(),Do(),So(),So(),La(),La(),So(5,96)]);
+seq.Add([Fa(),Fa(),Mi(),Mi(),Re(),Re(),Do(5,96)]);
+
+Do5Equals(keyF(5));
 seq.Add([Do(),Do(),So(),So(),La(),La(),So(5,96)]);
 seq.Add([Fa(),Fa(),Mi(),Mi(),Re(),Re(),Do(5,96)]);
 
