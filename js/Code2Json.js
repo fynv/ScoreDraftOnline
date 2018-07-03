@@ -64,27 +64,30 @@ function Real_Code2Json(code)
 	Sequence.prototype.Clean= function()
 	{
 		this.data=[];
+		return this;
 	}
 
 	Sequence.prototype.Add= function(sub_seq)
 	{
-		this.data=this.data.concat(sub_seq)
+		this.data=this.data.concat(sub_seq);
+		return this;
 	}
 
 	Sequence.prototype.ReAdd= function(sub_seq)
 	{
 		this.Clean();
 		this.Add(sub_seq);
+		return this;
 	}
 
 	Sequence.prototype.AsArray = function()
 	{
-		return this.data
+		return this.data;
 	}
 
 	Sequence.prototype.AsItem = function()
 	{
-		return [this.data]
+		return [this.data];
 	}
 
 	function setTempo(tempo)
