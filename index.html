@@ -504,10 +504,11 @@
 				// Sing a singing-sequence seq with singer, put the result into track<br/>
 				sing(seq,singer,track);
 			</code>
-			<h4>Utilities</h4>
+			<h3>Utilities</h3>
 			Unlike the APIs above which are all defined in Code2Json.js, utility functions are defined in <br/>
 			separated files which are submitted together with user's code. <br/>
 			Some of the utilities are included by default, others can be optionally included by user. <br/>
+			<h4>Default included utilities</h4>
 			<ul>
 				<li>notes.js</li>
 				Included by default, contains definition of notes. 
@@ -544,8 +545,8 @@
 					function TellDuration(seq)
 				</code>
 			</ul>
+			<h4>Optionally included utilities</h4>
 			C-like "#include" syntax is supported. That can be used to include the following files. <br/>
-			The code-editor will report an error when "#include" is used. Please ignore it.<br/>
 			<ul>
 				<li>notes_ext.js</li>
 				Add code 
@@ -617,12 +618,54 @@
 					// B  <br/>
 					function keyB(octave)  <br/>					
 				</code>
+				Example using notes.js and keys.js together for key changing:
+				<code class="api_code">
+					#include "keys.js" <br/>
+					Do5Equals(keyG(5)); // that sets the new key to G
+				</code>	
+				<li>guitar.js</li>
+				Add code 
+				<code class="api_code">
+					#include "guitar.js" 
+				</code>
+				to use it. It defines a group of tablature notation related interfaces.
+				<code class="api_code">
+					// set a tuning offset from standard, in half steps <br/>
+					function setGuitarTune(tune) <br/>
+					<br/>
+					// gnEB(), gnA(), gnD(), gnG(), gnB(), gnE()  <br/>
+					// these are used to generate a guitar note on one of the six strings  <br/>
+					// note on the low E string <br/>
+					function gnEB(fret, duration) <br/>
+					// note on the A string <br/>
+					function gnA(fret, duration) <br/>
+					// note on the D string <br/>
+					function gnD(fret, duration) <br/>
+					// note on the G string <br/>
+					function gnG(fret, duration) <br/>
+					// note on the B string <br/>
+					function gnB(fret, duration) <br/>
+					// note on the E string <br/>
+					function gnE(fret, duration) <br/>
+				</code>
+				With the class Chord, you can setup the fret positions at object creation time, <br/>
+				then use the object to create guitar notes easily. <br/>
+				<br/>
+				Create Chord object and setup fret positions: <br/>
+				<code>
+				chordG = new Chord([3,2,0,0,0,3]); <br/>
+				</code>
+				<br/>
+				Create guitar notes: <br/>
+				<code>
+				// chordG.EB(), chordG.A(), chordG.D(), chordG.G(), chordG.B(), chordG.E() <br/>
+				// create notes and the six strings, only a "duration" parameter is needed <br/>
+				seq.Add([chordG.A(24), chordG.D(24), ...]); <br/>
+				</code>
+
+									
+
 			</ul>
-			Example using notes.js and keys.js together for key changing:
-			<code class="api_code">
-				#include "keys.js" <br/>
-				Do5Equals(keyG(5)); // that sets the new key to G
-			</code>	
 		</div>
 		<iframe id="displayer"></iframe>
 		<div>Note: whatever you enter below will be executed locally by your browser. 
@@ -693,8 +736,9 @@ playNoteSeq(seq,inst,track1);
 			load_inst_list();
 			var editor = ace.edit("code");
 			editor.setTheme("ace/theme/chrome");
-			editor.session.setMode("ace/mode/javascript");
 			editor.setFontSize(16);
+			editor.session.setMode("ace/mode/javascript");
+			editor.session.setUseWorker(false);
 		</script>
 
 	</body>
