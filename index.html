@@ -662,8 +662,17 @@
 				// create notes and the six strings, only a "duration" parameter is needed <br/>
 				seq.Add([chordG.A(24), chordG.D(24), ...]); <br/>
 				</code>
-
-									
+				<br/>
+				Forward and backward arpeggios using a Chord: <br/>
+				<code class="api_code">
+				// forward arpeggio: <br/>
+				// start/end refer to strings <br/>
+				Chord.prototype.forward = function(duration, delay=0, start=0, end=5) <br/>
+				<br/>
+				// backward arpeggio: <br/>
+				// start/end refer to strings <br/>
+				Chord.prototype.backward = function(duration, delay=0, start=5, end=0) <br/>
+				</code>							
 
 			</ul>
 		</div>
