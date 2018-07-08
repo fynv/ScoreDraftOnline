@@ -63,9 +63,10 @@ session_unset();
 		<script type="text/javascript">
 			var editor = ace.edit("code");
 			editor.setTheme("ace/theme/chrome");
-			editor.session.setMode("ace/mode/javascript");
 			editor.setFontSize(16);
 			editor.setReadOnly(true); 
+			editor.session.setMode("ace/mode/javascript");
+			editor.session.setUseWorker(false);
 
 			var jsFileName= "sessions/"+session_num+".js"
 			loadJS(jsFileName);
